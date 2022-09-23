@@ -974,6 +974,7 @@ TEST_P(Test_Int8_nets, opencv_face_detector)
 
 TEST_P(Test_Int8_nets, EfficientDet)
 {
+    applyTestTag(CV_TEST_TAG_DEBUG_VERYLONG);
     if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
         applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
     if (target == DNN_TARGET_OPENCL && !ocl::Device::getDefault().isIntel())
@@ -1028,7 +1029,7 @@ TEST_P(Test_Int8_nets, FasterRCNN_resnet50)
     Mat blob = blobFromImage(inp, 1.0, Size(800, 600), Scalar(), true, false);
     Mat ref = blobFromNPY(_tf("tensorflow/faster_rcnn_resnet50_coco_2018_01_28.detection_out.npy"));
 
-    float confThreshold = 0.5, scoreDiff = 0.05, iouDiff = 0.15;
+    float confThreshold = 0.8, scoreDiff = 0.05, iouDiff = 0.15;
     testDetectionNet(net, blob, ref, confThreshold, scoreDiff, iouDiff);
 }
 
@@ -1095,7 +1096,7 @@ TEST_P(Test_Int8_nets, FasterRCNN_zf)
 #else
         (target == DNN_TARGET_CPU ? CV_TEST_TAG_MEMORY_512MB : CV_TEST_TAG_MEMORY_1GB),
 #endif
-        CV_TEST_TAG_DEBUG_LONG
+        CV_TEST_TAG_DEBUG_VERYLONG
     );
 
     if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
@@ -1145,7 +1146,8 @@ TEST_P(Test_Int8_nets, YoloVoc)
 #else
         CV_TEST_TAG_MEMORY_1GB,
 #endif
-        CV_TEST_TAG_LONG
+        CV_TEST_TAG_LONG,
+        CV_TEST_TAG_DEBUG_VERYLONG
     );
 
     if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
@@ -1215,7 +1217,11 @@ TEST_P(Test_Int8_nets, TinyYoloVoc)
 
 TEST_P(Test_Int8_nets, YOLOv3)
 {
-    applyTestTag(CV_TEST_TAG_LONG, (target == DNN_TARGET_CPU ? CV_TEST_TAG_MEMORY_1GB : CV_TEST_TAG_MEMORY_2GB));
+    applyTestTag(
+            CV_TEST_TAG_LONG,
+            (target == DNN_TARGET_CPU ? CV_TEST_TAG_MEMORY_1GB : CV_TEST_TAG_MEMORY_2GB),
+            CV_TEST_TAG_DEBUG_VERYLONG
+            );
 
     if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
         applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
@@ -1255,7 +1261,11 @@ TEST_P(Test_Int8_nets, YOLOv3)
 
 TEST_P(Test_Int8_nets, YOLOv4)
 {
-    applyTestTag(CV_TEST_TAG_LONG, (target == DNN_TARGET_CPU ? CV_TEST_TAG_MEMORY_1GB : CV_TEST_TAG_MEMORY_2GB));
+    applyTestTag(
+            CV_TEST_TAG_LONG,
+            (target == DNN_TARGET_CPU ? CV_TEST_TAG_MEMORY_1GB : CV_TEST_TAG_MEMORY_2GB),
+            CV_TEST_TAG_DEBUG_VERYLONG
+            );
 
     if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
         applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
