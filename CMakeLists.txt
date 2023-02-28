@@ -471,6 +471,9 @@ OCV_OPTION(WITH_OBSENSOR "Include obsensor support (Orbbec RGB-D modules: Astra+
 OCV_OPTION(WITH_CANN "Include CANN support" OFF
   VISIBLE_IF TRUE
   VERIFY HAVE_CANN)
+OCV_OPTION(WITH_FLATBUFFERS "Include Flatbuffers support (required by DNN/TFLite importer)" ON
+  VISIBLE_IF TRUE
+  VERIFY HAVE_FLATBUFFERS)
 
 # OpenCV build components
 # ===================================================
@@ -750,6 +753,7 @@ include(cmake/OpenCVFindLibsVideo.cmake)
 include(cmake/OpenCVFindLibsPerf.cmake)
 include(cmake/OpenCVFindLAPACK.cmake)
 include(cmake/OpenCVFindProtobuf.cmake)
+include(cmake/OpenCVDetectFlatbuffers.cmake)
 if(WITH_TENGINE)
   include(cmake/OpenCVFindTengine.cmake)
 endif()
@@ -912,7 +916,7 @@ foreach(hal ${OpenCV_HAL})
     endif()
   endif()
 endforeach()
-configure_file("${OpenCV_SOURCE_DIR}/cmake/templates/custom_hal.hpp.in" "${CMAKE_BINARY_DIR}/custom_hal.hpp" @ONLY)
+configure_file("${OpenCV_SOURCE_DIR}/cmake/templates/custom_hal.hpp.in" "${OPENCV_CONFIG_FILE_INCLUDE_DIR}/custom_hal.hpp" @ONLY)
 unset(_hal_includes)
 
 

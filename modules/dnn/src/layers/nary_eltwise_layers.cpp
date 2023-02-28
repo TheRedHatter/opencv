@@ -112,7 +112,7 @@ public:
                     op == OPERATION::LESS_EQUAL
             );
         if (op == OPERATION::MAX || op == OPERATION::MIN || op == OPERATION::SUM ||
-            op == OPERATION::PROD || op == OPERATION::DIV)
+            op == OPERATION::PROD || op == OPERATION::DIV || op == OPERATION::ADD)
             return backendId == DNN_BACKEND_OPENCV || backendId == DNN_BACKEND_CUDA;
         return backendId == DNN_BACKEND_OPENCV;
     }
@@ -681,16 +681,28 @@ public:
                 return Ptr<BackendNode>();
         }
 
-        auto op_ = [this] {
-            switch (op) {
-                case OPERATION::MAX: return cuda4dnn::EltwiseOpType::MAX;
-                case OPERATION::MIN: return cuda4dnn::EltwiseOpType::MIN;
-                case OPERATION::SUM: return cuda4dnn::EltwiseOpType::SUM;
-                case OPERATION::PROD: return cuda4dnn::EltwiseOpType::PRODUCT;
-                case OPERATION::DIV: return cuda4dnn::EltwiseOpType::DIV;
-                default: CV_Error(Error::StsNotImplemented, "Other operators except MAX, MIN, SUM, PRODUCT and DIV are not supported with cuda.");
-            }
-        }();
+        cuda4dnn::EltwiseOpType op_ = cuda4dnn::EltwiseOpType::SUM;
+        switch (op) {
+            case OPERATION::MAX:
+                op_ = cuda4dnn::EltwiseOpType::MAX;
+                break;
+            case OPERATION::MIN:
+                op_ = cuda4dnn::EltwiseOpType::MIN;
+                break;
+            case OPERATION::SUM:
+                op_ = cuda4dnn::EltwiseOpType::SUM;
+                break;
+            case OPERATION::PROD:
+                op_ = cuda4dnn::EltwiseOpType::PRODUCT;
+                break;
+            case OPERATION::DIV:
+                op_ = cuda4dnn::EltwiseOpType::DIV;
+                break;
+            case OPERATION::ADD:
+                op_ = cuda4dnn::EltwiseOpType::SUM;
+                break;
+            default: return Ptr<BackendNode>(); // return empty cuda_node if the EltwiseOpType is unsupported type.
+        };
 
         return make_cuda_node<cuda4dnn::EltwiseOp>(preferableTarget, std::move(context->stream), op_, std::vector<float>());
     }
