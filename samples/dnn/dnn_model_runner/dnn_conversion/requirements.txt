@@ -2,10 +2,10 @@
 onnx>=1.7.0
 numpy>=1.19.1
 
-torch>=1.5.1
+torch>=2.10.0
 torchvision>=0.6.1
 
-tensorflow>=2.1.0
+tensorflow>=2.21.0rc0
 tensorflow-gpu>=2.1.0
 
 paddlepaddle>=2.0.0
@@ -13,3 +13,5 @@ paddlepaddle-gpu>=2.0.0
 paddlehub>=2.1.0
 paddle2onnx>=0.5.1
 paddleseg>=2.0.0
+keras>=3.9.0 # not directly required, pinned by Snyk to avoid a vulnerability
+pillow>=13.0.0 # not directly required, pinned by Snyk to avoid a vulnerability
